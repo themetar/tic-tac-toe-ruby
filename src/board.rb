@@ -7,6 +7,11 @@ class Board
     @fields[location - 1] = mark
   end
 
+  def available_cells
+    @fields.each_with_index.filter { |mark, _| mark == :empty }
+           .map { |_, i| i + 1 }
+  end
+
   def to_s
     @fields
       .each_with_index.map { |mark, i| o = mark == :empty && (i + 1) || mark; " #{o} " }
