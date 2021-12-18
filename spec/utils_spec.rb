@@ -1,7 +1,16 @@
 require_relative '../src/utils'
 require 'stringio'
 
-describe Utils do  
+describe Utils do
+
+  before do
+    # Spec files seem to receive the arguments of the rspec command (e.g. rspec --format d);
+    # and since we're messing with $stdin, we need to clear the arguments array.
+    # Otherwise the script will start reading the arguments, instead of our provided values.
+    @argv = ARGV.dup
+    ARGV.clear
+  end
+
   describe '::prompt' do
     let(:mock_in) { StringIO.new }
     let(:stub_out) { StringIO.new }
@@ -45,5 +54,7 @@ describe Utils do
       $stdout = STDOUT
     }
   end
+
+  after { ARGV.concat(@argv) }
 
 end
