@@ -1,14 +1,13 @@
 require_relative '../src/utils'
 require 'stringio'
+require_relative './stdio_helper'
 
 describe Utils do
+  include StdIOHelper
 
   before do
-    # Spec files seem to receive the arguments of the rspec command (e.g. rspec --format d);
-    # and since we're messing with $stdin, we need to clear the arguments array.
-    # Otherwise the script will start reading the arguments, instead of our provided values.
-    @argv = ARGV.dup
-    ARGV.clear
+    # Since we're messing with $stdin, we need to clear the arguments array.
+    stash_argv
   end
 
   describe '::prompt' do
@@ -55,6 +54,8 @@ describe Utils do
     }
   end
 
-  after { ARGV.concat(@argv) }
-
+  after do
+    # Pop from stash
+    restore_argv
+  end
 end
