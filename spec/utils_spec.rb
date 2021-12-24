@@ -19,11 +19,11 @@ describe Utils do
       $stdout = stub_out
     }
 
-    it 'shows test to user and returns their input' do
+    it 'shows query to user and returns their input' do
       mock_in.puts 'test 1'
       mock_in.puts 'test 2'
       mock_in.rewind
-      
+
       expect { Utils.prompt('question') }.to output("question\n").to_stdout
 
       expect(Utils.prompt('question')).to eq('test 2')
@@ -46,6 +46,15 @@ describe Utils do
       expect(
         Utils.prompt('Enter a number from 1 to 9') { |input| input.to_i.between?(1, 9) }
       ).to eq('5')
+    end
+
+    it 'uses default value with validation block on empty input' do
+      mock_in.puts ''
+      mock_in.rewind
+
+      expect(
+        Utils.prompt('Enter a number from 1 to 9', '8') { |input| input.to_i.between?(1, 9) }
+      ).to eq('8')
     end
 
     after {
